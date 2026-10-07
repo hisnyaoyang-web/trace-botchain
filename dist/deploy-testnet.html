@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f4f1" />
+    <title>TRACE · Testnet deployment</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      .deploy-shell{max-width:800px;margin:0 auto;padding:80px 24px 120px}.deploy-shell h1{font-size:clamp(42px,8vw,76px);line-height:1;letter-spacing:-.06em;font-weight:500;margin:24px 0}.deploy-shell>p{line-height:1.7;color:var(--muted);max-width:650px}.deploy-card{margin-top:54px;border:1px solid var(--ink);background:var(--white);padding:32px}.deploy-row{display:flex;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line);padding:18px 0;font-size:14px}.deploy-row span{color:var(--muted)}.deploy-row strong{font-family:var(--mono);font-size:12px;text-align:right;overflow-wrap:anywhere}.deploy-actions{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}.deploy-actions button{min-width:180px;padding:16px;border:1px solid var(--ink);background:var(--white);font:12px var(--mono)}.deploy-actions .primary-button{border-color:var(--blue);background:var(--blue);color:white}.deploy-actions button:disabled{opacity:.45;cursor:not-allowed}.deploy-output{margin-top:30px;line-height:1.8;overflow-wrap:anywhere}.deploy-output a,.deploy-shell p a{text-decoration:underline;color:var(--blue)}.deploy-warning{font-size:13px;color:var(--muted);margin-top:26px}
+    </style>
+  </head>
+  <body data-network="testnet">
+    <header class="site-header"><a class="wordmark" href="./index.html">TRACE<sup>®</sup></a><div class="network"><span class="network-dot"></span>BOHR TESTNET / 968</div><a class="wallet-button" href="./index.html">BACK TO APP</a></header>
+    <main class="deploy-shell">
+      <p class="kicker">TRACE / TESTNET DEPLOYMENT</p>
+      <h1>Test the registry.</h1>
+      <p>先在 BOT Chain 测试网上部署 TRACE 合约，取得 Gas 申请表所需的测试网链接。需要测试 BOT 时，使用<a href="https://faucet.botchain.ai/zh/basic" target="_blank" rel="noreferrer">官方 Faucet</a>；测试币不能用于主网。</p>
+      <div class="deploy-card">
+        <div class="deploy-row"><span>Network</span><strong>Bohr Testnet · 968</strong></div>
+        <div class="deploy-row"><span>Contract</span><strong>TraceRegistry</strong></div>
+        <div class="deploy-row"><span>Wallet</span><strong id="walletAddress">Not connected</strong></div>
+        <div class="deploy-row"><span>Test BOT balance</span><strong id="walletBalance">—</strong></div>
+        <div class="deploy-row"><span>Estimated maximum fee</span><strong id="estimatedFee">Connect wallet to estimate</strong></div>
+        <div class="deploy-actions"><button id="connectWallet">CONNECT METAMASK</button><button class="primary-button" id="deployButton" disabled>DEPLOY TO TESTNET</button></div>
+        <div class="deploy-output" id="deployOutput" role="status" aria-live="polite"></div>
+      </div>
+      <p class="deploy-warning">请在 MetaMask 中核对网络为 Bohr Testnet（968）。成功后，把测试网合约地址或交易链接填入 Gas 申请表。这个页面不会读取助记词或私钥。</p>
+    </main>
+    <script type="module" src="./deploy.js"></script>
+  </body>
+</html>
