@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f4f1" />
+    <title>TRACE · Mainnet deployment</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      .deploy-shell{max-width:800px;margin:0 auto;padding:80px 24px 120px}.deploy-shell h1{font-size:clamp(42px,8vw,76px);line-height:1;letter-spacing:-.06em;font-weight:500;margin:24px 0}.deploy-shell>p{line-height:1.7;color:var(--muted);max-width:650px}.deploy-card{margin-top:54px;border:1px solid var(--ink);background:var(--white);padding:32px}.deploy-row{display:flex;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line);padding:18px 0;font-size:14px}.deploy-row span{color:var(--muted)}.deploy-row strong{font-family:var(--mono);font-size:12px;text-align:right;overflow-wrap:anywhere}.deploy-actions{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}.deploy-actions button{min-width:180px;padding:16px;border:1px solid var(--ink);background:var(--white);font:12px var(--mono)}.deploy-actions .primary-button{border-color:var(--blue);background:var(--blue);color:white}.deploy-actions button:disabled{opacity:.45;cursor:not-allowed}.deploy-output{margin-top:30px;line-height:1.8;overflow-wrap:anywhere}.deploy-output a{text-decoration:underline;color:var(--blue)}.deploy-warning{font-size:13px;color:var(--muted);margin-top:26px}.deploy-code{font:12px var(--mono)}
+    </style>
+  </head>
+  <body>
+    <header class="site-header"><a class="wordmark" href="./index.html">TRACE<sup>®</sup></a><div class="network"><span class="network-dot"></span>BOT CHAIN / 677</div><a class="wallet-button" href="./index.html">BACK TO APP</a></header>
+    <main class="deploy-shell">
+      <p class="kicker">TRACE / MAINNET DEPLOYMENT</p>
+      <h1>Deploy the registry.</h1>
+      <p>此页面使用你在 Chrome 中安装的 MetaMask 部署 TRACE 合约。合约创建交易需要 BOT 支付 Gas。MetaMask 会在发送前显示费用，交易只会在你确认后发出。</p>
+      <div class="deploy-card">
+        <div class="deploy-row"><span>Network</span><strong>BOT Chain Mainnet · 677</strong></div>
+        <div class="deploy-row"><span>Contract</span><strong>TraceRegistry</strong></div>
+        <div class="deploy-row"><span>Wallet</span><strong id="walletAddress">Not connected</strong></div>
+        <div class="deploy-row"><span>BOT balance</span><strong id="walletBalance">—</strong></div>
+        <div class="deploy-row"><span>Estimated maximum fee</span><strong id="estimatedFee">Connect wallet to estimate</strong></div>
+        <div class="deploy-actions"><button id="connectWallet">CONNECT METAMASK</button><button class="primary-button" id="deployButton" disabled>DEPLOY TO MAINNET</button></div>
+        <div class="deploy-output" id="deployOutput" role="status" aria-live="polite"></div>
+      </div>
+      <p class="deploy-warning">请在 MetaMask 中核对网络与费用。此页面不会读取助记词或私钥。部署成功后复制交易链接和合约地址发给我，我会接入前端并准备赛事核验材料。</p>
+    </main>
+    <script type="module" src="./deploy.js"></script>
+  </body>
+</html>
