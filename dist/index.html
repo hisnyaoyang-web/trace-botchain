@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="TRACE — verifiable provenance for human–AI design work." />
+    <meta name="theme-color" content="#f4f4f1" />
+    <title>TRACE · Design Provenance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23141414'/%3E%3Cpath d='M13 16h38v9H37v25H27V25H13z' fill='%23fff'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="wordmark" href="#" aria-label="TRACE home">TRACE<sup>®</sup></a>
+      <div class="network"><span class="network-dot"></span>BOT CHAIN / 677</div>
+      <button class="wallet-button" id="connectWallet">CONNECT WALLET</button>
+    </header>
+
+    <main class="page-shell">
+      <section class="intro" aria-labelledby="page-title">
+        <p class="kicker">DESIGN PROVENANCE / 2026</p>
+        <h1 id="page-title">Design records<br />that can be verified.</h1>
+        <div class="intro-meta">
+          <p>记录作品 file hash、版本关系和 AI 使用说明。原文件保留在你的设备，只将可验证记录写入 BOT Chain。</p>
+          <div class="protocol-note"><span>PROTOCOL</span><strong>Keccak-256</strong><span>NETWORK</span><strong>BOT Chain</strong></div>
+        </div>
+      </section>
+
+      <section class="workspace" id="workspace">
+        <nav class="tabs" role="tablist" aria-label="TRACE functions">
+          <button class="tab active" data-tab="market" role="tab"><span>01</span>ARCHIVE</button>
+          <button class="tab" data-tab="create" role="tab"><span>02</span>REGISTER</button>
+          <button class="tab" data-tab="verify" role="tab"><span>03</span>VERIFY</button>
+        </nav>
+
+        <div class="panel active" id="market" role="tabpanel">
+          <div class="panel-heading">
+            <div><p class="section-label">RECENT RECORDS</p><h2>Onchain archive</h2></div>
+            <button class="quiet-button" id="refreshTasks">REFRESH</button>
+          </div>
+          <div class="task-list" id="workList"></div>
+          <p class="demo-note">Demo records are shown until the TRACE contract is deployed.</p>
+        </div>
+
+        <div class="panel" id="create" role="tabpanel">
+          <div class="panel-heading">
+            <div><p class="section-label">NEW RECORD</p><h2>Register a work</h2></div>
+            <p class="panel-note">文件在浏览器本地计算 hash，不会上传。</p>
+          </div>
+          <form id="registerWorkForm" class="form-grid">
+            <label class="field"><span>WORK TITLE</span><input id="workTitle" required maxlength="80" placeholder="Project or work title" /></label>
+            <label class="field"><span>CREATOR</span><input id="creatorName" required maxlength="40" placeholder="Name or studio" /></label>
+            <label class="field field-wide"><span>DESIGN NOTE</span><textarea id="designNote" required rows="4" placeholder="Briefly explain the intent and key design decisions."></textarea></label>
+            <label class="field field-wide"><span>AI DISCLOSURE</span><textarea id="aiDisclosure" rows="3" placeholder="Describe where AI was used, or leave blank if it was not used."></textarea></label>
+            <label class="field file-field"><span>WORK FILE</span><input id="assetFile" type="file" required accept="image/*,.pdf,.svg,.fig" /></label>
+            <label class="field"><span>PARENT VERSION HASH · OPTIONAL</span><input id="parentHash" placeholder="0x…" /></label>
+            <div class="hash-preview field-wide"><span>KECCAK-256 FILE HASH</span><code id="assetHash">Select a file to calculate its hash locally.</code><small>Hash 是文件的固定长度校验值。文件内容发生变化，hash 也会改变。</small></div>
+            <button class="primary-button field-wide" type="submit">REGISTER ON BOT CHAIN</button>
+          </form>
+        </div>
+
+        <div class="panel" id="verify" role="tabpanel">
+          <div class="panel-heading">
+            <div><p class="section-label">PUBLIC LOOKUP</p><h2>Verify a record</h2></div>
+            <p class="panel-note">无需连接钱包即可查询。</p>
+          </div>
+          <form id="verifyForm" class="verify-form">
+            <label class="field"><span>RECORD ID</span><input id="verifyWorkId" required inputmode="numeric" placeholder="e.g. 24" /></label>
+            <button class="primary-button" type="submit">VERIFY</button>
+          </form>
+          <div class="verify-result" id="verifyResult"><p>Enter a record ID to inspect its creator, file hash and parent version.</p></div>
+        </div>
+      </section>
+
+      <section class="principles" aria-label="TRACE principles">
+        <div class="principle-index">TRACE / 03</div>
+        <div class="principle-copy">
+          <p class="section-label">WHAT GETS RECORDED</p>
+          <ol>
+            <li><span>01</span><strong>File hash</strong><p>用于检查作品文件是否与登记时完全一致。</p></li>
+            <li><span>02</span><strong>AI disclosure</strong><p>由创作者主动说明 AI 在创作流程中的参与范围。</p></li>
+            <li><span>03</span><strong>Version relation</strong><p>通过 parent hash 连接前后版本，保留迭代脉络。</p></li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div><strong>TRACE</strong><span>Design provenance on BOT Chain.</span></div>
+      <nav><a href="https://scan.botchain.ai" target="_blank" rel="noreferrer">EXPLORER</a><a href="https://dev-docs.botchain.ai/docs/Developers/quick-guide/" target="_blank" rel="noreferrer">DOCUMENTATION</a></nav>
+    </footer>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
