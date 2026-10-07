@@ -19,6 +19,10 @@ python3 -m http.server 4173
 
 打开 `http://localhost:4173`。未配置合约地址时使用演示数据。
 
+## 测试网部署与 Gas 申请
+
+在 Chrome 打开站点的 `/deploy-testnet.html`，连接 Bohr Testnet（Chain ID `968`，RPC `https://rpc.bohr.life`）。从[官方 Faucet](https://faucet.botchain.ai/zh/basic)领取测试 BOT 后，部署 `TraceRegistry` 合约。成功页面会显示 `https://scan.bohr.life` 上的合约及交易链接，可用于 Gas 申请表。测试网记录不等于主网部署。
+
 ## 主网部署
 
 1. 使用 Chrome 和 MetaMask 打开站点的 `/deploy.html`，连接 BOT Chain Mainnet。Chain ID 为 `677`，RPC 为 `https://rpc.botchain.ai`，代币为 `BOT`。
