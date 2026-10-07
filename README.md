@@ -7,7 +7,7 @@
 1. 连接 BOT Chain 钱包。
 2. 选择作品文件；文件不会上传，只在本地计算哈希。
 3. 填写灵感、设计判断与 AI 参与方式。
-4. 可填写上一版本哈希，建立可验证的版本关系。
+4. 可填写上一版本 hash，合约会验证该版本由同一钱包登记。
 5. 将 file hash 和声明写入 BOT Chain，并通过区块浏览器核验。
 
 ## 本地运行
@@ -21,11 +21,14 @@ python3 -m http.server 4173
 
 ## 主网部署
 
-1. 在 Remix 用 Solidity 0.8.24 编译 `contracts/TraceRegistry.sol`。
-2. 添加 BOT Chain Mainnet：Chain ID `677`，RPC `https://rpc.botchain.ai`，代币 `BOT`，浏览器 `https://scan.botchain.ai`。
-3. Remix 选择 Injected Provider，部署 `TraceRegistry`。
-4. 将合约地址填入 `dist/app.js` 的 `CONTRACT_ADDRESS`。
-5. 登记一件作品和一个迭代版本，保存合约、部署交易和登记交易的浏览器链接。
+1. 使用 Chrome 和 MetaMask 打开站点的 `/deploy.html`，连接 BOT Chain Mainnet。Chain ID 为 `677`，RPC 为 `https://rpc.botchain.ai`，代币为 `BOT`。
+2. 确认钱包有 BOT Gas，检查预估费用，在 MetaMask 中签署部署交易。
+3. 保存成功页面上的合约地址及部署交易链接。将合约地址填入 `dist/app.js` 的 `CONTRACT_ADDRESS` 并重新发布站点。
+4. 登记一件作品和一个迭代版本，保存登记交易链接，作为主网核验材料。
+
+`dist/contracts_TraceRegistry_sol_TraceRegistry.bin` 由 Solidity 0.8.24、optimizer enabled、runs 200 编译 `contracts/TraceRegistry.sol` 得到。`deploy.html` 读取该文件并通过 MetaMask 发送合约创建交易。
+
+作品原文件只在浏览器本地计算 hash，不会上传。登记表单中填写的作品名称、署名、设计说明和 AI 使用说明会作为公开链上数据，提交前请勿填写隐私信息。
 
 ## 比赛介绍
 
