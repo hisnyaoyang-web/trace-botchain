@@ -4,7 +4,7 @@ TRACE 是面向设计师的作品溯源与 AI 共创披露工具。设计师不�
 
 **在线体验：** [TRACE 网站](https://trace-design-botchain.yxy09050929.chatgpt.site/) · [BOT Chain 主网合约](https://scan.botchain.ai/address/0x3692fffc944ADBa17E611FC43FaF8BA84EBaf528) · [主网部署交易](https://scan.botchain.ai/tx/0xc60f8dbdc539434bcdf4ed0f8f63fe0e1162fbe935309771ec6230c820efbe09)
 
-> **当前状态（2026-10-08）：** `TraceRegistry` 已部署到 BOT Chain Mainnet，网页已接入主网合约，作品档案从主网读取。主网部署交易已核验；作品登记交易仍待创作者通过网页提交。
+> **当前状态（2026-10-08）：** `TraceRegistry` 已部署到 BOT Chain Mainnet，网页已接入主网合约，作品档案从主网读取。主网部署交易和第一件作品的登记交易均已核验。
 
 ## 为谁解决什么问题
 
@@ -24,7 +24,7 @@ TRACE 是面向设计师的作品溯源与 AI 共创披露工具。设计师不�
 
 ## 本届活动期间完成
 
-TRACE 的交互设计与前端页面、浏览器本地 file hash 计算、MetaMask 连接、`TraceRegistry` 合约及版本归属规则、测试网与主网部署、可核验的合约部署交易，以及接入主网合约的公开档案查询。主网作品登记需要创作者选择作品文件并确认交易。
+TRACE 的交互设计与前端页面、浏览器本地 file hash 计算、MetaMask 连接、`TraceRegistry` 合约及版本归属规则、测试网与主网部署、可核验的合约部署交易、接入主网合约的公开档案查询，以及第一件作品的主网登记。
 
 ## 本地运行
 
@@ -50,6 +50,8 @@ python3 -m http.server 4173
 **主网合约：** [`0x3692fffc944ADBa17E611FC43FaF8BA84EBaf528`](https://scan.botchain.ai/address/0x3692fffc944ADBa17E611FC43FaF8BA84EBaf528)
 
 **主网部署交易：** [`0xc60f8dbdc539434bcdf4ed0f8f63fe0e1162fbe935309771ec6230c820efbe09`](https://scan.botchain.ai/tx/0xc60f8dbdc539434bcdf4ed0f8f63fe0e1162fbe935309771ec6230c820efbe09)
+
+**主网作品登记交易（记录 #1）：** [`0xcbff8c96ef856193e25a88edf3839b707eb60653e8be2f77eaa1d0ea988a5f0e`](https://scan.botchain.ai/tx/0xcbff8c96ef856193e25a88edf3839b707eb60653e8be2f77eaa1d0ea988a5f0e)
 
 **测试网合约：** [`0x3692fffc944ADBa17E611FC43FaF8BA84EBaf528`](https://scan.bohr.life/address/0x3692fffc944ADBa17E611FC43FaF8BA84EBaf528)
 
