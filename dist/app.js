@@ -1,16 +1,13 @@
-import { BrowserProvider, Contract, keccak256 } from "https://cdn.jsdelivr.net/npm/ethers@6.13.5/+esm";
+import { BrowserProvider, Contract, JsonRpcProvider, keccak256 } from "https://cdn.jsdelivr.net/npm/ethers@6.13.5/+esm";
 
 const BOT_CHAIN = { chainId: "0x2a5", chainName: "BOT Chain Mainnet", nativeCurrency: { name: "BOT", symbol: "BOT", decimals: 18 }, rpcUrls: ["https://rpc.botchain.ai"], blockExplorerUrls: ["https://scan.botchain.ai"] };
-const CONTRACT_ADDRESS = ""; // Deploy contracts/TraceRegistry.sol and paste its address here.
+const CONTRACT_ADDRESS = "0x3692fffc944adba17e611fc43faf8ba84ebaf528";
 const ABI = ["function workCount() view returns (uint256)", "function works(uint256) view returns (address creator,bytes32 assetHash,bytes32 parentHash,string metadataURI,uint64 createdAt)", "function registerWork(bytes32 assetHash,bytes32 parentHash,string metadataURI) returns (uint256)"];
-const demoWorks = [
-  { id: 24, title: "城市呼吸 · 海报系列", creator: "MORI", type: "视觉设计" },
-  { id: 23, title: "江岸夜航 · 动态字体", creator: "LIN", type: "动态设计" },
-  { id: 22, title: "未完成的椅子 03", creator: "YU", type: "产品设计" }
-];
+const publicProvider = new JsonRpcProvider(BOT_CHAIN.rpcUrls[0], 677);
 let provider, signer, account, currentAssetHash = "";
 const $ = s => document.querySelector(s);
 const shorten = v => v ? `${v.slice(0, 6)}…${v.slice(-4)}` : "—";
+const escapeHtml = v => String(v).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const toast = message => { const el = $("#toast"); el.textContent = message; el.classList.add("show"); clearTimeout(window.__toast); window.__toast = setTimeout(() => el.classList.remove("show"), 3200); };
 
 document.querySelectorAll(".tab").forEach(tab => tab.addEventListener("click", () => {
@@ -21,6 +18,7 @@ document.querySelectorAll(".tab").forEach(tab => tab.addEventListener("click", (
 async function connectWallet() {
   if (!window.ethereum) return toast("请安装 MetaMask，或使用支持 EVM 的钱包打开。");
   try {
+    await window.ethereum.request({ method: "eth_requestAccounts" });
     const chainId = await window.ethereum.request({ method: "eth_chainId" });
     if (chainId.toLowerCase() !== BOT_CHAIN.chainId) {
       try { await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: BOT_CHAIN.chainId }] }); }
@@ -32,17 +30,15 @@ async function connectWallet() {
 }
 
 function contract(write = false) {
-  if (!CONTRACT_ADDRESS) throw new Error("演示模式：部署合约后填写 CONTRACT_ADDRESS 即可上链");
-  if (!provider) throw new Error("请先连接钱包");
-  return new Contract(CONTRACT_ADDRESS, ABI, write ? signer : provider);
+  if (write && !signer) throw new Error("请先连接钱包");
+  return new Contract(CONTRACT_ADDRESS, ABI, write ? signer : publicProvider);
 }
 
-function renderWorks(items, demo = false) {
-  $("#workList").innerHTML = items.length ? items.map(w => `<article class="task"><div class="task-id">#${w.id}</div><div><h3>${w.title}</h3><p>${w.creator} · ${w.type}${demo ? " · DEMO" : ""}</p></div><span class="status verified">已留痕</span></article>`).join("") : '<div class="empty">还没有作品。登记第一段创作过程吧。</div>';
+function renderWorks(items) {
+  $("#workList").innerHTML = items.length ? items.map(w => `<article class="task"><div class="task-id">#${w.id}</div><div><h3>${escapeHtml(w.title)}</h3><p>${escapeHtml(w.creator)} · ${escapeHtml(w.type)}</p></div><span class="status verified">已留痕</span></article>`).join("") : '<div class="empty">主网还没有作品记录。登记第一段创作过程吧。</div>';
 }
 
 async function loadWorks() {
-  if (!CONTRACT_ADDRESS || !provider) return renderWorks(demoWorks, true);
   try {
     const c = contract(), count = Number(await c.workCount());
     const ids = Array.from({ length: Math.min(count, 20) }, (_, i) => count - i);
@@ -66,7 +62,9 @@ $("#registerWorkForm").addEventListener("submit", async e => {
   try {
     if (!currentAssetHash) throw new Error("请先选择作品文件");
     if (!account) await connectWallet();
+    if (!account) throw new Error("钱包未连接");
     const parent = $("#parentHash").value.trim() || "0x" + "0".repeat(64);
+    if (!/^0x[0-9a-fA-F]{64}$/.test(parent)) throw new Error("上一版本 file hash 应为 0x 开头的 64 位十六进制值");
     const metadata = { title: $("#workTitle").value.trim(), creator: $("#creatorName").value.trim(), note: $("#designNote").value.trim(), aiDisclosure: $("#aiDisclosure").value.trim() || "未使用 AI" };
     const uri = `data:application/json,${encodeURIComponent(JSON.stringify(metadata))}`;
     const tx = await contract(true).registerWork(currentAssetHash, parent, uri);
@@ -77,14 +75,11 @@ $("#registerWorkForm").addEventListener("submit", async e => {
 
 $("#verifyForm").addEventListener("submit", async e => {
   e.preventDefault(); const id = Number($("#verifyWorkId").value), result = $("#verifyResult");
-  if (!CONTRACT_ADDRESS || !provider) {
-    const w = demoWorks.find(x => x.id === id);
-    result.innerHTML = w ? `<div class="proof-result"><p class="eyebrow">CREATIVE TRACE</p><h2>#${id} · 已留痕</h2><dl><div><dt>作品</dt><dd>${w.title}</dd></div><div><dt>创作者</dt><dd>${w.creator}</dd></div><div><dt>网络</dt><dd>BOT Chain · 677</dd></div><div><dt>类型</dt><dd>${w.type}</dd></div></dl></div>` : "<p>没有找到该作品。演示编号可输入 22、23 或 24。</p>"; return;
-  }
   try {
+    if (!Number.isSafeInteger(id) || id < 1) throw new Error("请输入有效的记录编号");
     const w = await contract().works(id); if (w.creator === "0x0000000000000000000000000000000000000000") throw new Error("作品不存在");
     result.innerHTML = `<div class="proof-result"><p class="eyebrow">ON-CHAIN TRACE</p><h2>#${id} · 已留痕</h2><dl><div><dt>创作者</dt><dd>${w.creator}</dd></div><div><dt>登记时间</dt><dd>${new Date(Number(w.createdAt) * 1000).toLocaleString()}</dd></div><div><dt>File hash</dt><dd>${w.assetHash}</dd></div><div><dt>Parent version hash</dt><dd>${w.parentHash}</dd></div></dl><p><a href="https://scan.botchain.ai/address/${CONTRACT_ADDRESS}" target="_blank">在区块浏览器中核验</a></p></div>`;
-  } catch (e) { result.innerHTML = `<p>${e.shortMessage || e.message || "查询失败"}</p>`; }
+  } catch (e) { result.textContent = e.shortMessage || e.message || "查询失败"; }
 });
 
 $("#connectWallet").addEventListener("click", connectWallet);
