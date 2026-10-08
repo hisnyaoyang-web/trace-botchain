@@ -2,9 +2,9 @@
 
 TRACE 是面向设计师的作品溯源与 AI 共创披露工具。设计师不只交付最终图片，也需要讲清设计判断、AI 参与范围和版本脉络。TRACE 在浏览器本地计算作品文件的 Keccak-256 **file hash**，把它与创作者的声明、前一版本的 file hash 一起登记到 BOT Chain；作品原文件不上传。
 
-**在线体验：** [TRACE 网站](https://trace-design-botchain.yxy09050929.chatgpt.site/) · [测试网合约](https://scan.bohr.life/address/0x3692fffc944ADBa17E611FC43FaF8BA84EBaf528) · [测试网部署交易](https://scan.bohr.life/tx/0x7cf36ae4017c83fab575567583902793619691723c02e3db70e95f3835502e5d)
+**在线体验：** [TRACE 网站](https://trace-design-botchain.yxy09050929.chatgpt.site/) · [BOT Chain 主网合约](https://scan.botchain.ai/address/0x3692fffc944ADBa17E611FC43FaF8BA84EBaf528) · [主网部署交易](https://scan.botchain.ai/tx/0xc60f8dbdc539434bcdf4ed0f8f63fe0e1162fbe935309771ec6230c820efbe09)
 
-> **当前状态（2026-10-07）：** Bohr Testnet 合约已部署并有可核验交易。网站首页仍是界面演示模式：`dist/app.js` 的主网 `CONTRACT_ADDRESS` 为空，展示的示例作品不是链上记录，登记按钮不会提交交易。**BOT Chain 主网尚未部署。** 请勿把测试网证明当作主网交付物。
+> **当前状态（2026-10-08）：** `TraceRegistry` 已部署到 BOT Chain Mainnet，网页已接入主网合约，作品档案从主网读取。主网部署交易已核验；作品登记交易仍待创作者通过网页提交。
 
 ## 为谁解决什么问题
 
@@ -18,13 +18,13 @@ TRACE 是面向设计师的作品溯源与 AI 共创披露工具。设计师不�
 2. 填写作品名称、署名、设计说明及 AI 使用说明。
 3. 如是迭代版本，填写前一版本的 file hash；合约要求该版本已登记，且登记钱包相同。
 4. 钱包确认登记交易后，合约保存 file hash、前一版本 file hash、公开声明、登记钱包和时间，并发出 `WorkRegistered` 事件。
-5. 通过记录编号和区块浏览器核对链上记录。第 3—5 步在网页中要等相应网络的合约地址接入后才能真实运行。
+5. 通过记录编号和区块浏览器核对链上记录。公开查询无需连接钱包；写入需要 MetaMask 确认交易。
 
 同一个 file hash 只可登记一次。这条记录证明某钱包在某时间提交了特定 file hash 和声明，**不自动证明法律上的著作权、真实身份或 AI 披露的真实性**。
 
 ## 本届活动期间完成
 
-TRACE 的交互设计与前端页面、浏览器本地 file hash 计算、MetaMask 连接、`TraceRegistry` 合约及版本归属规则、测试网部署入口和可核验的测试网部署交易。主网部署、首页接入主网合约和主网作品登记仍待完成，不列为已交付成果。
+TRACE 的交互设计与前端页面、浏览器本地 file hash 计算、MetaMask 连接、`TraceRegistry` 合约及版本归属规则、测试网与主网部署、可核验的合约部署交易，以及接入主网合约的公开档案查询。主网作品登记需要创作者选择作品文件并确认交易。
 
 ## 本地运行
 
@@ -36,7 +36,7 @@ cd trace-botchain/dist
 python3 -m http.server 4173
 ```
 
-打开 `http://localhost:4173/`。目前首页会显示三条明确标记为 `DEMO` 的示例记录；可以体验文件选择、本地 file hash 计算和表单，但不能在首页提交链上交易。请勿用 `file://` 直接打开，因为浏览器模块及资源加载可能受限。
+打开 `http://localhost:4173/`。首页读取 BOT Chain Mainnet 上的真实记录；没有记录时显示空状态。选择作品文件可在本地计算 file hash，登记时需在 MetaMask 中确认主网交易。请勿用 `file://` 直接打开，因为浏览器模块及资源加载可能受限。
 
 ## 合约与网络
 
@@ -44,8 +44,12 @@ python3 -m http.server 4173
 
 | 网络 | Chain ID | RPC | 区块浏览器 | 本项目状态 |
 | --- | ---: | --- | --- | --- |
-| Bohr Testnet | 968 | `https://rpc.bohr.life` | `https://scan.bohr.life` | 合约已部署；首页尚未接入 |
-| BOT Chain Mainnet | 677 | `https://rpc.botchain.ai` | `https://scan.botchain.ai` | 待 Gas 与部署 |
+| Bohr Testnet | 968 | `https://rpc.bohr.life` | `https://scan.bohr.life` | 合约已部署，供测试与 Gas 申请证明 |
+| BOT Chain Mainnet | 677 | `https://rpc.botchain.ai` | `https://scan.botchain.ai` | 合约已部署，首页已接入 |
+
+**主网合约：** [`0x3692fffc944ADBa17E611FC43FaF8BA84EBaf528`](https://scan.botchain.ai/address/0x3692fffc944ADBa17E611FC43FaF8BA84EBaf528)
+
+**主网部署交易：** [`0xc60f8dbdc539434bcdf4ed0f8f63fe0e1162fbe935309771ec6230c820efbe09`](https://scan.botchain.ai/tx/0xc60f8dbdc539434bcdf4ed0f8f63fe0e1162fbe935309771ec6230c820efbe09)
 
 **测试网合约：** [`0x3692fffc944ADBa17E611FC43FaF8BA84EBaf528`](https://scan.bohr.life/address/0x3692fffc944ADBa17E611FC43FaF8BA84EBaf528)
 
@@ -55,7 +59,7 @@ python3 -m http.server 4173
 
 **测试网：** 在装有 MetaMask 的 Chrome 中打开网站的 [`/deploy-testnet.html`](https://trace-design-botchain.yxy09050929.chatgpt.site/deploy-testnet.html)，连接 Bohr Testnet。可从[官方 Faucet](https://faucet.botchain.ai/zh/basic)领取 test BOT。页面会显示钱包余额和预计 Gas；只有钱包确认后才发送部署交易。成功后保存测试网合约地址与交易链接。
 
-**主网：** 打开 [`/deploy.html`](https://trace-design-botchain.yxy09050929.chatgpt.site/deploy.html)，连接 BOT Chain Mainnet，核对 BOT 余额、网络和 MetaMask 的费用，再确认部署。成功后保存合约地址及部署交易链接，将地址填入 `dist/app.js` 的 `CONTRACT_ADDRESS` 并重新发布网站。随后用真实作品登记至少一笔主网交易，分别保留部署和登记的区块浏览器链接。测试网 Faucet 的代币不能支付主网 Gas。
+**主网：** 合约已经部署并接入网页。打开[首页](https://trace-design-botchain.yxy09050929.chatgpt.site/)的 REGISTER，连接 BOT Chain Mainnet 钱包，选择作品文件并填写声明。核对 MetaMask 的网络与费用后确认登记，保存交易链接作为作品上链证明。`/deploy.html` 是部署新合约的工具页；已有合约时无需重复部署。测试网 Faucet 的代币不能支付主网 Gas。
 
 部署交易由用户自己的钱包签署；本仓库及网页不需要、也不应接收助记词或私钥。
 
